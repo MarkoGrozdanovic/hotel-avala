@@ -28,54 +28,57 @@ const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
     }, [isBookingConfirmed, navigate])
 
     return(
-        <div className="card card-body mt-5">
-            <h4>Reservation Summary</h4>
+        <div className="row">
+            <div className="col-md-6"></div>
+            <div className="card card-body mt-5">
+                <h4 class="card-title hotel-color">Reservation Summary</h4>
 
-            <p>FullName : <strong>{booking.guestName}</strong></p>
-            <p>Email : <strong>{booking.guestEmail}</strong></p>
-            <p>Check-in date : <strong>{moment(booking.checkInDate).format("MMM Do YYYY")}</strong></p>
-            <p>Check-out date : <strong>{moment(booking.checkOutDate).format("MMM Do YYYY")}</strong></p>
-            <p>Number of Days : <strong>{numberOfDays}</strong></p>
-            <div>
-                <h5>Number of Guests</h5>
-                <strong>
-                    Adult{booking.numOfAdults > 1 ? "s" : ""} : {booking.numOfAdults}
-                </strong>
-                <strong>
-                    <p>Children : {booking.numOfChildren}</p>
-                </strong>
+                <p>FullName : <strong>{booking.guestName}</strong></p>
+                <p>Email : <strong>{booking.guestEmail}</strong></p>
+                <p>Check-in date : <strong>{moment(booking.checkInDate).format("MMM Do YYYY")}</strong></p>
+                <p>Check-out date : <strong>{moment(booking.checkOutDate).format("MMM Do YYYY")}</strong></p>
+                <p>Number of Days : <strong>{numberOfDays}</strong></p>
+                <div>
+                    <h5>Number of Guests</h5>
+                    <strong>
+                        Adult{booking.numOfAdults > 1 ? "s" : ""} : {booking.numOfAdults}
+                    </strong>
+                    <strong>
+                        <p>Children : {booking.numOfChildren}</p>
+                    </strong>
+                </div>
+                {payment > 0 ? (
+                        <>
+                            <p>
+                                Total payment: <strong>${payment}</strong>
+                            </p>
+
+                            {isFormValid && !isBookingConfirmed ? (
+                                <Button variant="success" onClick={handleConfirmBooking}>
+                                    {isProcessingPayment ? (
+                                        <>
+                                            <span
+                                                className="spinner-border spinner-border-sm mr-2"
+                                                role="status"
+                                                aria-hidden="true"></span>
+                                            Booking Confirmed, redirecting to payment...
+                                        </>
+                                    ) : (
+                                        "Confirm Booking & proceed to payment"
+                                    )}
+                                </Button>
+                            ) : isBookingConfirmed ? (
+                                <div className="d-flex justify-content-center align-items-center">
+                                    <div className="spinner-border text-primary" role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            ) : null}
+                        </>
+                    ) : (
+                        <p className="text-danger">Check-out date must be after check-in date.</p>
+                    )}
             </div>
-            {payment > 0 ? (
-					<>
-						<p>
-							Total payment: <strong>${payment}</strong>
-						</p>
-
-						{isFormValid && !isBookingConfirmed ? (
-							<Button variant="success" onClick={handleConfirmBooking}>
-								{isProcessingPayment ? (
-									<>
-										<span
-											className="spinner-border spinner-border-sm mr-2"
-											role="status"
-											aria-hidden="true"></span>
-										Booking Confirmed, redirecting to payment...
-									</>
-								) : (
-									"Confirm Booking & proceed to payment"
-								)}
-							</Button>
-						) : isBookingConfirmed ? (
-							<div className="d-flex justify-content-center align-items-center">
-								<div className="spinner-border text-primary" role="status">
-									<span className="sr-only">Loading...</span>
-								</div>
-							</div>
-						) : null}
-					</>
-				) : (
-					<p className="text-danger">Check-out date must be after check-in date.</p>
-				)}
         </div>
     )
 
